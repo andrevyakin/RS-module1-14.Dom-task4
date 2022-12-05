@@ -16,36 +16,69 @@ const tasks = [
     },
 ];
 
+const elementFactory = (element, parameters) => {
+    const el = document.createElement(element);
+    if (parameters.className)
+        Array.isArray(parameters.className)
+            ? parameters.className.forEach(i => el.classList.add(i))
+            : el.className = parameters.className;
+    if (parameters.dataset)
+        el.dataset[parameters.dataset.name] = parameters.dataset.value;
+    if (parameters.type)
+        el.type = parameters.type;
+    if (parameters.id)
+        el.id = parameters.id;
+    if (parameters.htmlFor)
+        el.htmlFor = parameters.htmlFor;
+    if (parameters.text)
+        el.textContent = parameters.text;
+    return el;
+}
+
 const createItems = (id, text) => {
-    const taskItem = document.createElement("div");
-    taskItem.className = "task-item";
-    taskItem.dataset.taskId = id;
-    const mainContainer = document.createElement("div");
-    mainContainer.className = "task-item__main-container";
-    const mainContent = document.createElement("div");
-    mainContent.className = "task-item__main-content";
-    const form = document.createElement("form");
-    form.className = "task-item__form";
-    const input = document.createElement("input");
-    input.type = "checkbox";
-    input.className = "checkbox-form";
-    input.id = `task-${id}`;
-    const label = document.createElement("label");
-    label.htmlFor = `task-${id}`;
-    form.append(input);
-    form.append(label);
-    const span = document.createElement("span");
-    span.className = "task-item__text";
-    span.textContent = text;
-    mainContent.append(form);
-    mainContent.append(span);
-    const button = document.createElement("button");
-    button.classList.add("task-item__delete-button", "default-button", "delete-button");
-    button.dataset.deleteTaskId = id;
-    button.textContent = "Удалить";
-    mainContainer.append(mainContent);
-    mainContainer.append(button);
+    const taskItem = elementFactory("div", {
+        className: "task-item",
+        dataset: {
+            name: "taskId",
+            value: id
+        }
+    });
+    const mainContainer = elementFactory("div", {
+        className: "task-item__main-container"
+    });
     taskItem.append(mainContainer);
+    const mainContent = elementFactory("div", {
+        className: "task-item__main-content"
+    });
+    mainContainer.append(mainContent);
+    const form = elementFactory("form", {
+        className: "task-item__form"
+    });
+    mainContent.append(form);
+    const input = elementFactory("input", {
+        className: "checkbox-form__checkbox",
+        type: "checkbox",
+        id: `task-${id}`
+    });
+    form.append(input);
+    const label = elementFactory("label", {
+        htmlFor: `task-${id}`
+    });
+    form.append(label);
+    const span = elementFactory("span", {
+        className: "task-item__text",
+        text
+    });
+    mainContent.append(span);
+    const button = elementFactory("button", {
+        className: ["task-item__delete-button", "default-button", "delete-button"],
+        dataset: {
+            name: "deleteTaskId",
+            value: id
+        },
+        text: "Удалить"
+    });
+    mainContainer.append(button);
     return taskItem;
 }
 
