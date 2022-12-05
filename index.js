@@ -105,7 +105,7 @@ const validations = text => {
     return true;
 }
 
-createTaskBlock.addEventListener("submit", (event) => {
+createTaskBlock.addEventListener("submit", event => {
     event.preventDefault();
     const textToAdd = event.target.taskName.value
     if (validations(textToAdd)) {
